@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<head>
+  <link href='http://fonts.googleapis.com/css?family=Satisfy:400,300' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Baloo+Bhaina:400,300' rel='stylesheet' type='text/css'>
+
+  <style>
+    body {
+      font-family: 'Baloo Bhaina', sans-serif;
+      text-align: center;
+      cursor: default;
+      background-color: #a2c9d8;
+    }
+
+    h1 {
+      font-family: 'Satisfy';
+      font-size: 100px;
+      margin-top: 30px;
+      margin-bottom: 5px;
+    }
+
+    form {
+      margin-top: 40px;
+      margin-bottom: 30px;
+    }
+
+    input{
+      background-color: #d0edff;
+      font-family: 'Baloo Bhaina';
+      border: none;
+      padding: 0px;
+      font-size: 20px;
+      -webkit-border-radius: 5px;
+      height: 43px;
+      text-align: center
+    }
+
+    input:focus {
+        outline: none;
+    }
+
+    .overlay {
+      fill: none;
+      pointer-events: all;
+    }
+
+    .tooltip {
+      text-shadow: 0 1px 0 #000, 1px 0 0 #000, -1px 0 0 #000, 0 -1px 0 #000;
+      position: absolute;
+      width: 1200px;
+      height: 28px;
+      pointer-events: none;
+      text-align: center;
+      font-size: 40px;
+      line-height: 1;
+      box-sizing: border-box;
+      color: #1d3c54;
+    }
+  </style>
+</head>
+
+<body>
+  <h1><FONT color='#1d3c54'>Music Space</FONT></h1>
+
+  <form action="" method="post" onsubmit="search();return false;">
+    <input type="text" id="song" placeholder="Enter Song Name"/></input>
+  </form>
+
+  <script src="//d3js.org/d3.v3.min.js"></script>
+
+  <script>
+    function search() {
+      var query = document.getElementById("song").value.toLowerCase();
+
+      d3.selectAll("circle.song")
+        // .style("fill", "#fff")
+        // .attr("r", 2.5)
+        .filter(function(d) {
+          return d.songs.toLowerCase().indexOf(query) != -1;
+        })
+        .attr("r", 7)
+        .attr("opacity", 1)
+        .style("fill", "#1d3c54")
+      }
+
+    var width = 960,
+        height = 500;
+
+    var x = d3.scale.linear()
+        .domain([-19, 19])
+        .range([0, width]);
+
+    var y = d3.scale.linear()
+        .domain([-11, 11])
+        .range([height, 0]);
+
+    var svg = d3.select("body").append("svg")
+        .attr("width", width)
+        .attr("height", height)
+      .append("g")
+        .call(d3.behavior.zoom( ).x(x).y(y).scaleExtent([1, 8]).on("zoom", zoom));
+
+    var circle;
+    var data;
+
+    var tooltip = d3.select("body").append("div")
+        .attr("class", "tooltip")
+        .style("opacity", 0);
+
+    function zoom() {
+      circle.attr("transform", transform);
+    }
+
+    svg.append("rect")
+        .attr("class", "overlay")
+        .attr("width", width)
+        .attr("height", height);
+
+    d3.csv("/static/tsne_data.csv", function(datas) {
+      data = datas;
+      data.forEach(function(d) {
+        d.xs = +d.xs;
+        d.ys = +d.ys;
+      });
+
+      circle = svg.selectAll("circle")
+                  .data(data)
+                .enter().append("circle")
+                  .attr("r", 2.5)
+                  .attr("opacity", 0.4)
+                  .attr("transform", transform)
+                  .attr("class", "song")
+                  .attr("fill", function(d) { return "#ffffff"; })
+                  .on("mouseover", function(d) {
+                     tooltip.transition()
+                          .duration(0)
+                          .style("opacity", 1);
+                     tooltip.html("Artist: " + d.artists + "<br/>" + "Song: " + d.songs)
+                          .style("left", (d3.event.pageX - 600) + "px")
+                          .style("top", (d3.event.pageY - 100) + "px");
+                  })
+                  .on("mouseout", function(d) {
+                     tooltip.transition()
+                          .duration(0)
+                          .style("opacity", 0);
+                });
+    })
+
+    function transform(d) {
+      return "translate(" + x(d.xs) + "," + y(d.ys) + ")";
+    }
+  </script>
+</body>
