@@ -11,7 +11,7 @@ Previously, music recommenders were just like your friends that shared good musi
 `predictions.ipynb` feed songs from test set to the convnet and get predictions  
 `tsne.ipynb` map the 10-dimensional song vectors to 2-dimensional tsne vectors  
 `recommendation.ipynb` recommend songs based on the convnet model  
-`app` an app including a d3 interactive TSNE graph with the ability to input song names
+`app` Flask app including a d3 interactive TSNE graph with the ability to input song names
 
 ## Citation
 https://papers.nips.cc/paper/5004-deep-content-based-music-recommendation.pdf
