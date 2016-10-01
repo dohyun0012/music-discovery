@@ -1,5 +1,5 @@
 # Music Discovery
-Previously, music recommenders were just like your friends that shared good music with you. Now, we turn them into hipster music snobs chasing fresh new songs with data science. You can read about this project on my [blog](http://dohyunshin.com/jekyll/pixyll/2016/09/24/music-discovery/).
+Previously, music recommenders were just like your friends that shared good music with you. Now, we turn them into hipster music snobs chasing fresh new songs with data science. You can read about this project on my [blog](http://dohyunshin.com/jekyll/pixyll/2016/09/24/music-discovery/). You can also check out the app [here](http://dohyunshin.com/app/templates/index.html)!
 
 ## Files
 `hdf5_getters.py` helper function to retrieve data from Million Song Dataset  
